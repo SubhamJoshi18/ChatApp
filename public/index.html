@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f5f5f5;
+      }
+
+      .container {
+        max-width: 600px;
+        margin: 20px auto;
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+      }
+
+      .input-container {
+        display: flex;
+      }
+
+      input[type="text"] {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px 0 0 5px;
+        font-size: 16px;
+      }
+
+      button {
+        padding: 10px 20px;
+        border: none;
+        background-color: #007bff;
+        color: #fff;
+        border-radius: 0 5px 5px 0;
+        cursor: pointer;
+        font-size: 16px;
+      }
+
+      button:hover {
+        background-color: #0056b3;
+      }
+
+      #messages {
+        margin-bottom: 20px;
+      }
+
+      .message {
+        background-color: #f2f2f2;
+        padding: 10px 20px;
+        border-radius: 5px;
+        margin-bottom: 10px;
+      }
+
+      .message:last-child {
+        margin-bottom: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>ChatApp</h1>
+    <div class="container">
+      <div id="messages"></div>
+      <div class="inpu-container">
+        <input type="text" id="message" placeholder="Enter Message" />
+        <button id="sendbtn">Send</button>
+      </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      var socket = io();
+      const sendbtn = document.getElementById("sendbtn");
+      const messageinput = document.getElementById("message");
+      const allMessages = document.getElementById("messages");
+
+      socket.on("message", (newMessage) => {
+        console.log(newMessage);
+        const p = document.createElement("p");
+        p.innerText = newMessage;
+        allMessages.appendChild(p);
+      });
+      sendbtn.addEventListener("click", (e) => {
+        const newMessage = messageinput.value;
+        console.log(newMessage);
+        console.log("clicked");
+
+        socket.emit("message", newMessage);
+      });
+    </script>
+  </body>
+</html>
